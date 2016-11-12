@@ -5,7 +5,7 @@
         status_fac.$inject = ["$http"];
 
         function status_fac($http) {
-            var api = "/statuses/"
+            var api = "https://status-universe.herokuapp.com/statuses/"
             var service = {
                 create: create,
                 delete_status: delete_status,

@@ -3,9 +3,9 @@
 		.factory("user_fac", user_fac)
 	user_fac.$inject = ["$http"]
 	function user_fac($http){
-		var api = "/users/";
-		var api_pw_url = "/users/password-change/";
-		var api_pw_url_confirmed = "/users/password-change-confirmed/";
+		var api = "https://status-universe.herokuapp.com/users/";
+		var api_pw_url = "https://status-universe.herokuapp.com/users/password-change/";
+		var api_pw_url_confirmed = "https://status-universe.herokuapp.com/users/password-change-confirmed/";
 		var service = {
 			index: index,
 			show: show,
