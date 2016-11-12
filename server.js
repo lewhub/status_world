@@ -9,9 +9,14 @@ var user_rts = require("./routes/user_rts.js");
 var status_rts = require("./routes/status_rts.js");
 var dotenv = require("dotenv").load({ silent: true });
 
-mongoose.connect("mongodb://localhost/blog_universe", function(err){
+// for local mongo shell db testing
+// mongoose.connect("mongodb://localhost/blog_universe", function(err){
+//     if (err) return console.log(err)
+//     console.log("connected to blog_universe db...")
+// })
+mongoose.connect(process.env.MLAB_URI, function(err){
     if (err) return console.log(err)
-    console.log("connected to blog_universe db...")
+    console.log("connect to status_universe");
 })
 
 app.use(body_parser.urlencoded( { extended: false } ));
