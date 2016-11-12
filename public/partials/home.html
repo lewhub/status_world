@@ -1,0 +1,27 @@
+<style>
+    #username:hover {
+        color: blue;
+        cursor: pointer;
+    }
+    #username {
+        color: tomato;
+        font-size: 35px;
+    }
+    .user-block {
+        font-size: 30px;
+        text-align: center;
+    }
+    #user-heading {
+        text-align: center;
+    }
+</style>
+<div id="user-heading">
+    <h2><u>Click on a username to view posts.</u></h2>
+</div>
+<div class="user-block" ng-repeat="user in home_ctrl.all_users">
+    <span>Username: <a id="username" ui-sref="single-user({id: user._id})">{{ user.username }}</a></span>
+    <br>
+    <br>
+    <span>Email: {{ user.email }}</span>
+    <hr>
+</div>

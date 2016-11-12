@@ -1,0 +1,304 @@
+<style>
+    #single-user-heading-div {
+        text-align: center;
+    }
+    #user-email-li {
+        font-size: 25px;
+    }
+    #user-email-div {
+        text-align: right;
+    }
+    #email-ul {
+        list-style: none;
+        margin-right: 30px;
+    }
+    #edit-btn {
+        padding: 5px;
+        display: block;
+        margin-top: 20px;
+        width: 120px;
+        height: 30px;
+        font-size: 18px;
+    }
+    #logout-btn {
+        padding: 5px;
+        display: block;
+        margin-top: 20px;
+        width: 84px;
+        height: 30px;
+        font-size: 20px;
+        padding-bottom: 30px !important;
+    }
+    #save-btn {
+        padding: 5px;
+        display: block;
+        margin-top: 20px;
+        width: 144px;
+        height: 30px;
+        font-size: 18px;
+    }
+    #username-edit {
+        font-size: 20px;
+    }
+    #email-edit {
+        font-size: 20px;
+    }
+    #cancel-btn {
+        padding: 5px;
+        display: block;
+        margin-top: 20px;
+        width: 98px;
+        height: 30px;
+        font-size: 18px;
+    }
+    #change-pw-btn {
+        padding: 5px;
+        display: block;
+        margin-top: 20px;
+        width: 188px;
+        height: 30px;
+        font-size: 18px;
+    }
+    .password-btn {
+        font-size: 20px;
+        width: 218px;
+    }
+    #delete-btn {
+        font-size: 20px;
+        width: 170px;
+        background-color: tomato;
+    }
+    #new-status-btn {
+        font-size: 73px;
+        float: right;
+        margin-right: 20px;
+        background-color: white;
+        padding: 0;
+        margin-top: -6px;
+        height: 52px;
+        border: none;
+    }
+    #new-status-btn:focus {
+        outline-style: none;
+    }
+    #new-status-btn:active {
+        background-color: buttonface;
+        border-style: inset;
+    }
+    #new-status-text {
+        position: relative;
+        top: -30px;
+    }
+    #new-status-text:focus {
+        outline-style: none;
+    }
+    #new-status-text:active {
+        color: green;
+    }
+    #new-status-form {
+        position: absolute;
+        width: 800px;
+        height: 515px;
+        top: 50px;
+        left: 575px;
+        background-color: white;
+        border: 2px solid black;
+    }
+    #edit-status-form {
+        position: absolute;
+        width: 800px;
+        height: 515px;
+        top: 50px;
+        left: 575px;
+        background-color: white;
+        border: 2px solid black;
+    }
+    #modal-h1 {
+        text-align: center;
+    }
+    #modal-close-btn {
+        float: right;
+        margin-right: 18px;
+        text-decoration: none;
+        -webkit-appearance: none;
+        font-size: 41px;
+        margin-top: -5px;
+        background: snow;
+        border-color: gray;
+        border-style: solid;
+    }
+    #modal-close-btn:focus {
+        outline-style: none;
+    }
+    #modal-close-btn:active {
+        background-color: buttonface;
+        border-style: inset;
+    }
+    #modal-h1-text {
+        margin-left: 64px;
+    }
+    #modal-textarea-div {
+        text-align: center;
+    }
+    #modal-textarea-text {
+        width: 679px;
+        height: 286px;
+        font-size: 20px;
+        padding: 10px;
+    }
+    #modal-textarea-text:focus {
+        outline-style: none;
+    }
+    #modal-textarea-text-edit-form {
+        width: 679px;
+        height: 286px;
+        font-size: 20px;
+        padding: 10px;
+    }
+    #modal-textarea-text-edit-form:focus {
+        outline-style: none;
+    }
+     #modal-create-btn {
+        font-size: 28px;
+        -webkit-appearance: none;
+        background-color: white;
+        border: 2px solid gray;
+        border-radius: 25px;
+        padding: 10px 12px 10px 12px;
+    }
+    #modal-create-btn:focus {
+        outline-style: none;
+    }
+    #modal-create-btn:active {
+        border-style: inset;
+        background-color: buttonface;
+    }
+    #modal-edit-btn {
+        font-size: 28px;
+        -webkit-appearance: none;
+        background-color: white;
+        border: 2px solid gray;
+        border-radius: 25px;
+        padding: 10px 12px 10px 12px;
+        width: 88px;
+    }
+    #modal-edit-btn:focus {
+        outline-style: none;
+    }
+    #modal-edit-btn:active {
+        border-style: inset;
+        background-color: buttonface;
+    }
+    #modal-create-btn-div {
+        text-align: center;
+    }
+    #modal-edit-btn-div {
+        text-align: center;
+    }
+    .status-div {
+        margin-bottom: 10px;
+        padding: 0 75px 0 75px;
+    }
+    .status-content {
+        font-size: 20px;
+    }
+    .delete-status-btn {
+        -webkit-appearance: none;
+        float: right;
+        font-size: 20px;
+        background-color: aliceblue;
+        border: none;
+    }
+    .delete-status-btn:focus {
+        outline-style: none;
+    }
+    .delete-status-btn:active {
+        border-style: inset;
+        background-color: black;
+        color: red;
+    }
+    .edit-status-btn {
+        float: right;
+        -webkit-appearance: none;
+        font-size: 18px;
+        margin-right: 10px;
+        background-color: azure;
+    }
+    .edit-status-btn:focus {
+        outline-style: none;
+    }
+    .edit-status-btn:active {
+        background-color: #C0D9AF;
+    }
+</style>
+<button ng-if="global.is_authed() && single_user_ctrl.can_logout()" id="logout-btn" ng-click="global.logout()">Logout</button>
+<button ng-show="!single_user_ctrl.editing && single_user_ctrl.can_logout() && global.is_authed()" type="button" id="edit-btn" ng-click="single_user_ctrl.begin_editing()">Edit Profile</button>
+<button ng-show="single_user_ctrl.editing" type="button" id="save-btn" ng-click="single_user_ctrl.save_updates()">Save Changes</button>
+<button ng-show="single_user_ctrl.editing" type="button" id="cancel-btn" ng-click="single_user_ctrl.cancel_changes()">Cancel</button>
+<button ng-show="single_user_ctrl.editing && !single_user_ctrl.changing_password" type="button" id="change-pw-btn" ng-click="single_user_ctrl.start_password_change()">Change Password</button>
+<br>
+<button ng-show="single_user_ctrl.editing && single_user_ctrl.can_logout()" type="button" id="delete-btn" ng-click="single_user_ctrl.delete_account()"> Delete Account </button>
+<div ng-show="single_user_ctrl.changing_password">
+    <br>
+    <input class="password-btn" type="password" placeholder="Current Password:" ng-model="single_user_ctrl.new_password.current_pw">
+    <br>
+    <br>
+    <input class="password-btn" type="password" placeholder="New Password:" ng-model="single_user_ctrl.new_password.new_pw">
+    <br>
+    <br>
+    <input class="password-btn" type="password" placeholder="Confirm New Password:" ng-model="single_user_ctrl.new_password.confirm_new_pw">
+</div>
+<div id="single-user-heading-div">
+    <h1 ng-show="!single_user_ctrl.editing"> <u>{{ single_user_ctrl.user_details.username }}'s Profile</u> </h1>
+    <h1 ng-show="single_user_ctrl.editing"> <input id="username-edit" type="text" ng-model="single_user_ctrl.user_details.username"> </h1>
+</div>
+<div id="user-email-div">
+    <ul id="email-ul">
+        <li ng-show="!single_user_ctrl.editing" id="user-email-li">Email: {{ single_user_ctrl.user_details.email }}</li>
+        <li ng-show="single_user_ctrl.editing"> <input id="email-edit" type="text" ng-model="single_user_ctrl.user_details.email"> </li>
+    </ul>
+</div>
+<hr>
+<div>
+    <h1> Statuses <button ng-show="single_user_ctrl.can_logout() && global.is_authed()" ng-click="single_user_ctrl.bring_up_modal()" id="new-status-btn" type="button"><span id="new-status-text">+</span></button> </h1>
+    <hr>
+    <div class="status-div" ng-repeat="status in single_user_ctrl.user_details.statuses | orderBy: '': reverse = true">
+        <!-- finish patch on front end. -->
+        <input ng-click="single_user_ctrl.delete_status($index)" ng-show="single_user_ctrl.editing && !single_user_ctrl.edit_modal_up" class="delete-status-btn" type="button" value="X">
+        <input ng-click="single_user_ctrl.bring_up_edit_modal($index, $event)" ng-show="single_user_ctrl.editing && !single_user_ctrl.edit_modal_up" class="edit-status-btn" type="button" value="Edit Status">
+        <br>
+        <span class="status-content"> {{ status.content }} </span>
+        <br>
+        <hr>
+    </div>
+</div>
+
+<div ng-show="single_user_ctrl.modal_up" id="new-status-form">
+    <div id="modal-h1">
+        <h1 id="modal-h1-text"> <u>Add a new status to your profile:</u> <input id="modal-close-btn" ng-click="single_user_ctrl.close_modal()" type="button" value="X"> </h1>
+    </div>
+    <br>
+    <div id="modal-textarea-div">
+        <textarea ng-model="single_user_ctrl.new_status.content" id="modal-textarea-text" placeholder="Status content goes here...."></textarea>
+    </div>
+    <br>
+    <div id="modal-create-btn-div">
+        <input ng-click="single_user_ctrl.create_new_status()" id="modal-create-btn" type="button" value="Create">
+    </div>
+    <br>
+</div>
+
+<div ng-show="single_user_ctrl.edit_modal_up" id="edit-status-form">
+    <div id="modal-h1">
+        <h1 id="modal-h1-text"> <u>Edit this status:</u> <input id="modal-close-btn" ng-click="single_user_ctrl.close_edit_modal()" type="button" value="X"> </h1>
+    </div>
+    <br>
+    <div id="modal-textarea-div">
+        <textarea ng-model="single_user_ctrl.status_content_current" id="modal-textarea-text-edit-form"></textarea>
+    </div>
+    <br>
+    <div id="modal-edit-btn-div">
+        <input ng-click="single_user_ctrl.update_current_status()" id="modal-edit-btn" type="button" value="Save">
+    </div>
+    <br>
+</div>

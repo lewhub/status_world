@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Blog Universe</title>
+        <link rel="stylesheet" href="../public/css/styles.css">
+        <script src="./public/js/angular.js"></script>
+        <script src="./public/js/angular-ui-router.js"></script>
+        <script src="./public/js/app.js"></script>
+	<script src="./public/js/config.js"></script>
+	<script src="./public/js/controllers/home_ctrl.js"></script>
+    <script src="./public/js/controllers/single_user_ctrl.js"></script>
+    <script src="./public/js/controllers/signup_ctrl.js"></script>
+    <script src="./public/js/controllers/login_ctrl.js"></script>
+    <script src="./public/js/controllers/global_ctrl.js"></script>
+	<script src="./public/js/factories/user_fac.js"></script>
+    <script src="./public/js/factories/status_fac.js"></script>
+    </head>
+    <body ng-app="blog_universe" ng-controller="GlobalController as global">
+        <a class="nav-button" ui-sref="home">Home</a>
+        <a ng-if="!global.is_authed() && !global.at_signup" class="nav-button" ui-sref="sign-up">Sign-Up</a>
+        <a ng-if="!global.is_authed() && !global.at_login" class="nav-button" ui-sref="login">Login</a>
+        <a ng-if="global.is_authed() && !global.at_profile" class="nav-button" ui-sref="single-user({ id: global.current_user_id() })">Profile</a>
+        <div ui-view></div>
+    </body>
+</html>

@@ -1,0 +1,59 @@
+<style>
+    #signup-heading-div {
+        text-align: center;
+    }
+    .signup-input {
+        font-size: 22px;
+        padding: 10px 0 10px 10px;
+        width: 450px;
+        border-radius: 5px;
+        border-style: solid;
+        border-width: 1px;
+    }
+    .signup-input:focus {
+        outline-style: none;
+    }
+    #signup-form {
+        text-align: center;
+    }
+    #submit-btn {
+        font-size: 28px;
+        -webkit-appearance: none;
+        background-color: white;
+        border: 2px solid gray;
+        border-radius: 25px;
+        padding: 10px 12px 10px 12px;
+    }
+    #submit-btn:focus {
+        outline-style: none;
+    }
+    #submit-btn:active {
+        border-style: inset;
+        background-color: buttonface;
+    }
+</style>
+<!-- finish styling sign up form and login form and then start crud on front end for statuses. -->
+<div id="signup-heading-div">
+    <h1><u>Sign Up</u></h1>
+</div>
+<div id="signup-form">
+    <div>
+        <input class="signup-input" type="text" placeholder="Username:" ng-model="signup_ctrl.new_user.username">
+    </div>
+    <br>
+    <div>
+        <input class="signup-input" type="email" placeholder="Email:" ng-model="signup_ctrl.new_user.email">
+    </div>
+    <br>
+    <div>
+        <input class="signup-input"  type="password" placeholder="Password:" ng-model="signup_ctrl.new_user.password">
+    </div>
+    <br>
+    <div>
+        <input class="signup-input" type="password" placeholder="Confirm Password:" ng-model="signup_ctrl.confirm_password">
+    </div>
+    <br>
+    <div>
+        <input id="submit-btn" type="button" value="Submit" ng-click="signup_ctrl.signup()">
+    <div>
+</div>
