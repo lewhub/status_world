@@ -275,6 +275,9 @@
         font-size: 25px;
         padding: 20px;
     }
+    .li-like-modal-text {
+        font-size: 20px;
+    }
 </style>
 <!-- create likes and comments for other statuses on front end and back end -->
 <button ng-if="global.is_authed() && single_user_ctrl.can_logout()" id="logout-btn" ng-click="global.logout()">Logout</button>
@@ -359,7 +362,7 @@
     </div>
    
     <ul>
-        <li ng-repeat="username in single_user_ctrl.arr_for_like_modal">
+        <li class="li-like-modal-text" ng-repeat="username in single_user_ctrl.arr_for_like_modal">
             {{ username }}
         </li>
     </ul>
