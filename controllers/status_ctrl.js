@@ -94,6 +94,7 @@ module.exports = {
             })
      },
      dislike_status: function(req, res) {
+         console.log(req.body.user_id, "begining of dislike")
          Status
             .findOne( {_id: req.params.id} )
             .exec( function(err, status) {
@@ -103,9 +104,11 @@ module.exports = {
                     .findOne( { _id: req.body.user_id } )
                     .exec( function(err, user) {
                         if (err) return console.log(err)
-                        status.likes.splice(user._id, 1);
+                        console.log(status.likes, "<<<<");
+                        status.likes.splice(index_in_arr, 1);
                         status.save( function(err, status) {
                             if (err) return console.log(err)
+                            console.log(status.likes, "after deleting")
                             res.json( { success: true, message: "status disliked", status } )
                         })
                     })
