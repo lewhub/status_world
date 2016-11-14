@@ -245,26 +245,46 @@
                 vm.status_content_current = "";
             }
 
-            vm.heart_button_clicked = function(evt) {
-                var btn = angular.element(evt.target);
-                btn.removeClass("fa-heart-o")
-                btn.addClass("fa-heart heart-btn-change")
-                // $window.setTimeout(function(){
-                //     btn.removeClass("heart-btn-change")
-                //     btn.addClass("fa-heart-o")
-                // }, 300)
+            vm.heart_button_clicked = function(evt, logged_in) {
+                if (logged_in) {
+                    var btn = angular.element(evt.target);
+                    btn.removeClass("fa-heart-o");
+                    btn.addClass("fa-heart heart-btn-change");
+                } else {
+                    console.log("mouse down but not logged in...");
+                }
+
             }
 
-            vm.heart_button_up = function(evt, status_id, status_content){
-                console.log("liked!", status_id, status_content, $window.localStorage["current-user-id"]);
-                vm.status_like_id = status_id;
-                var local_id = $window.localStorage["current-user-id"];
-                var btn = angular.element(evt.target);
-                btn.removeClass("fa-heart heart-btn-change");
-                btn.addClass("fa-heart-o");
-                status_fac
-                    .like_status(status_id, { user_id: local_id })
-                    .then(like_status_complete, err_callback)
+            vm.heart_button_up = function(evt, status_id, status_content, logged_in){
+                if (logged_in) {
+                    console.log("liked!", status_id, status_content, $window.localStorage["current-user-id"]);
+                    vm.status_like_id = status_id;
+                    var local_id = $window.localStorage["current-user-id"];
+                    var btn = angular.element(evt.target);
+                    btn.removeClass("fa-heart heart-btn-change");
+                    btn.addClass("fa-heart-o");
+                    status_fac
+                        .like_status(status_id, { user_id: local_id })
+                        .then(like_status_complete, err_callback)
+                } else {
+                    console.log("mouse up on heart but not logged in");
+                    console.log(logged_in)
+                    $window.alert("You must log in to like someone\'s status.\nPlease navigate to the log in page and log in.")
+                }
+               
+            }
+
+            vm.comment_icon_down = function(evt) {
+                var icon = angular.element(evt.target);
+                icon.removeClass("fa-commenting-o");
+                icon.addClass("fa-commenting");
+            }
+
+            vm.comment_icon_up = function(evt) {
+                var icon = angular.element(evt.target);
+                icon.removeClass("fa-commenting");
+                icon.addClass("fa-commenting-o");
             }
 
             function like_status_complete(res) {

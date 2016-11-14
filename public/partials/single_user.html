@@ -278,8 +278,28 @@
     .li-like-modal-text {
         font-size: 20px;
     }
+    .comment-icon {
+        position: absolute;
+        margin-top: -33px;
+        right: 112px;
+        color: #00688B;
+    }
+    .comment-icon:hover {
+        cursor: pointer;
+    }
+    .comment-count-text {
+        position: absolute;
+        right: 97px;
+        font-size: 18px;
+        margin-top: -14px;
+    }
+    .comment-count-text:hover {
+        cursor: pointer;
+    }
+
 </style>
-<!-- create likes and comments for other statuses on front end and back end -->
+<!-- complete likes implementation by allowing users who are not logged in to be able to see likes on statuses. -> done -->
+<!-- create comments for statuses on front end and back end -->
 <button ng-if="global.is_authed() && single_user_ctrl.can_logout()" id="logout-btn" ng-click="global.logout()">Logout</button>
 <button ng-show="!single_user_ctrl.editing && single_user_ctrl.can_logout() && global.is_authed()" type="button" id="edit-btn" ng-click="single_user_ctrl.begin_editing()">Edit Profile</button>
 <button ng-show="single_user_ctrl.editing" type="button" id="save-btn" ng-click="single_user_ctrl.save_updates()">Save Changes</button>
@@ -315,10 +335,13 @@
         <input ng-click="single_user_ctrl.delete_status($index)" ng-show="single_user_ctrl.editing && !single_user_ctrl.edit_modal_up" class="delete-status-btn" type="button" value="X">
         <input ng-click="single_user_ctrl.bring_up_edit_modal($index, $event)" ng-show="single_user_ctrl.editing && !single_user_ctrl.edit_modal_up" class="edit-status-btn" type="button" value="Edit Status">
         <br>
-        <i ng-show="global.is_authed()" ng-mousedown="single_user_ctrl.heart_button_clicked($event)" ng-mouseup="single_user_ctrl.heart_button_up($event, status._id, status.content)" class="fa fa-heart-o fa-2x heart-btn"></i>
-        <span ng-click="single_user_ctrl.show_liked_users_modal(status.likes, status.content)" ng-show="global.is_authed()" class="heart-btn-text"> {{ status.likes.length }} </span>
+        <i ng-mousedown="single_user_ctrl.heart_button_clicked($event, global.is_authed())" ng-mouseup="single_user_ctrl.heart_button_up($event, status._id, status.content, global.is_authed())" class="fa fa-heart-o fa-2x heart-btn"></i>
+        <span ng-click="single_user_ctrl.show_liked_users_modal(status.likes, status.content)" class="heart-btn-text"> {{ status.likes.length }} </span>
         <span class="status-content"> {{ status.content }} </span>
         <br>
+        <br>
+        <i ng-mousedown="single_user_ctrl.comment_icon_down($event)" ng-mouseup="single_user_ctrl.comment_icon_up($event)" class="fa fa-commenting-o fa-2x comment-icon"></i>
+        <span class="comment-count-text">40</span>
         <hr>
     </div>
 </div>
