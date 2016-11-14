@@ -140,7 +140,7 @@
                         // console.log("able to logout");
                         return true;
                     } else {
-                        console.log("unable to logout. reason: local id and user id don't match.")
+                        // console.log("unable to logout. reason: local id and user id don't match.")
                         return false;
                     }
                 }
@@ -209,6 +209,8 @@
             
             }
 
+            
+
             vm.bring_up_edit_modal = function(index, event){
                 console.log("bringing up edit modal");
                 var div_to_edit = angular.element(event.path[1]);
@@ -243,10 +245,77 @@
                 vm.status_content_current = "";
             }
 
-            
+            vm.heart_button_clicked = function(evt) {
+                var btn = angular.element(evt.target);
+                btn.removeClass("fa-heart-o")
+                btn.addClass("fa-heart heart-btn-change")
+                // $window.setTimeout(function(){
+                //     btn.removeClass("heart-btn-change")
+                //     btn.addClass("fa-heart-o")
+                // }, 300)
+            }
 
+            vm.heart_button_up = function(evt, status_id, status_content){
+                console.log("liked!", status_id, status_content, $window.localStorage["current-user-id"]);
+                vm.status_like_id = status_id;
+                var local_id = $window.localStorage["current-user-id"];
+                var btn = angular.element(evt.target);
+                btn.removeClass("fa-heart heart-btn-change");
+                btn.addClass("fa-heart-o");
+                status_fac
+                    .like_status(status_id, { user_id: local_id })
+                    .then(like_status_complete, err_callback)
+            }
 
+            function like_status_complete(res) {
+                get_user();
+                var local_id = $window.localStorage["current-user-id"];
+                console.log("status liked!");
+                console.log(res);
+                if (!res.data.success) {
+                    status_fac
+                        .dislike_status(vm.status_like_id, { user_id: local_id })
+                        .then(dislike_status_complete, err_callback)
+                }
+            }
+
+            function dislike_status_complete(res) {
+                get_user();
+                vm.status_like_id = "";
+                console.log("status unliked");
+                console.log(res);
+            }
+
+            vm.show_liked_users_modal = function(arr, content) {
+                console.log("array of users that liked this status...");
+                // console.log(arr);
+                vm.content_for_like_modal = content;
+                vm.arr_for_like_modal = new Array();
+                for (var i = 0; i < arr.length; i++) {
+                    user_fac
+                        .show(arr[i])
+                        .then(user_found, err_callback)
+                }
+            }
+
+            vm.username_modal_up = false;
+            function user_found(res) {
+                //console.log(res.data.user.username);
+                var username = res.data.user.username;
+                vm.arr_for_like_modal.push(username);
+                // console.log(vm.arr_for_like_modal, "<<<<<");
+                // bring up modal with usernames
+                vm.username_modal_up = true;
+            }
+
+            vm.close_like_modal = function() {
+                console.log("closing like modal...")
+                vm.username_modal_up = false;
+                vm.arr_for_like_modal = [];
+                vm.content_for_like_modal = "";
+            }
 
         }
+
 
 }())

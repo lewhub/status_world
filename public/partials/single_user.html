@@ -89,6 +89,9 @@
         position: relative;
         top: -30px;
     }
+    #new-status-text:hover {
+        cursor: pointer;
+    }
     #new-status-text:focus {
         outline-style: none;
     }
@@ -230,7 +233,50 @@
     .edit-status-btn:active {
         background-color: #C0D9AF;
     }
+    .heart-btn {
+        position: absolute;
+        left: 35px;
+        margin-top: -8px;
+        color: #00688B;
+    }
+    .heart-btn:hover {
+        cursor: pointer;
+    }
+    .heart-btn-text {
+        position: absolute;
+        left: 28px;
+        margin-top: 11px;
+    }
+    .heart-btn-text:hover {
+        color: #42647F;
+        font-size: 25px;
+        cursor: pointer;
+    }
+    .heart-btn-text:active {
+        font-size: 28px;
+    }
+    .heart-btn-change {
+        color: #ff6666;
+        
+    }
+    #username-modal-list {
+        position: absolute;
+        width: 800px;
+        height: 515px;
+        top: 50px;
+        left: 575px;
+        background-color: white;
+        border: 2px solid black;
+    }
+    #content-like-p-tag-text {
+        text-align: center;
+    }
+    #content-like-p-tag-text-2 {
+        font-size: 25px;
+        padding: 20px;
+    }
 </style>
+<!-- create likes and comments for other statuses on front end and back end -->
 <button ng-if="global.is_authed() && single_user_ctrl.can_logout()" id="logout-btn" ng-click="global.logout()">Logout</button>
 <button ng-show="!single_user_ctrl.editing && single_user_ctrl.can_logout() && global.is_authed()" type="button" id="edit-btn" ng-click="single_user_ctrl.begin_editing()">Edit Profile</button>
 <button ng-show="single_user_ctrl.editing" type="button" id="save-btn" ng-click="single_user_ctrl.save_updates()">Save Changes</button>
@@ -263,10 +309,11 @@
     <h1> Statuses <button ng-show="single_user_ctrl.can_logout() && global.is_authed()" ng-click="single_user_ctrl.bring_up_modal()" id="new-status-btn" type="button"><span id="new-status-text">+</span></button> </h1>
     <hr>
     <div class="status-div" ng-repeat="status in single_user_ctrl.user_details.statuses | orderBy: '': reverse = true">
-        <!-- finish patch on front end. -->
         <input ng-click="single_user_ctrl.delete_status($index)" ng-show="single_user_ctrl.editing && !single_user_ctrl.edit_modal_up" class="delete-status-btn" type="button" value="X">
         <input ng-click="single_user_ctrl.bring_up_edit_modal($index, $event)" ng-show="single_user_ctrl.editing && !single_user_ctrl.edit_modal_up" class="edit-status-btn" type="button" value="Edit Status">
         <br>
+        <i ng-show="global.is_authed()" ng-mousedown="single_user_ctrl.heart_button_clicked($event)" ng-mouseup="single_user_ctrl.heart_button_up($event, status._id, status.content)" class="fa fa-heart-o fa-2x heart-btn"></i>
+        <span ng-click="single_user_ctrl.show_liked_users_modal(status.likes, status.content)" ng-show="global.is_authed()" class="heart-btn-text"> {{ status.likes.length }} </span>
         <span class="status-content"> {{ status.content }} </span>
         <br>
         <hr>
@@ -301,4 +348,19 @@
         <input ng-click="single_user_ctrl.update_current_status()" id="modal-edit-btn" type="button" value="Save">
     </div>
     <br>
+</div>
+
+<div ng-show="single_user_ctrl.username_modal_up" id="username-modal-list">
+    <div id="modal-h1">
+        <h1 id="modal-h1-text"> <u>Users who have liked this status:</u> <input id="modal-close-btn" ng-click="single_user_ctrl.close_like_modal()" type="button" value="X"> </h1>
+    </div>
+    <div id="content-like-p-tag-text">
+         <p id="content-like-p-tag-text-2"> {{ single_user_ctrl.content_for_like_modal }} </p>
+    </div>
+   
+    <ul>
+        <li ng-repeat="username in single_user_ctrl.arr_for_like_modal">
+            {{ username }}
+        </li>
+    </ul>
 </div>

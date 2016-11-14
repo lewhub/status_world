@@ -72,6 +72,44 @@ module.exports = {
                         })
                     })
             })
+     },
+     like_status: function(req, res) {
+         Status
+            .findOne( {_id: req.params.id} )
+            .exec( function(err, status) {
+                if (err) return console.log(err)
+                var index_in_arr = status.likes.indexOf(req.body.user_id)
+                if (index_in_arr !== -1) return res.json({ success: false, message: "status already liked" })
+                User
+                    .findOne({_id: req.body.user_id})
+                    .exec( function(err, user) {
+                        if (err) return console.log(err)
+                        status.likes.push(user._id);
+                        status.save( function(err, status) {
+                            if (err) return console.log(err)
+                            res.json({success: true, message: "status liked!", status: status})
+                        })
+                        
+                    })
+            })
+     },
+     dislike_status: function(req, res) {
+         Status
+            .findOne( {_id: req.params.id} )
+            .exec( function(err, status) {
+                if (err) return console.log(err)
+                var index_in_arr = status.likes.indexOf(req.body.user_id);
+                User
+                    .findOne( { _id: req.body.user_id } )
+                    .exec( function(err, user) {
+                        if (err) return console.log(err)
+                        status.likes.splice(user._id, 1);
+                        status.save( function(err, status) {
+                            if (err) return console.log(err)
+                            res.json( { success: true, message: "status disliked", status } )
+                        })
+                    })
+            } )
      }
      
 }
