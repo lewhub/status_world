@@ -268,6 +268,15 @@
         background-color: white;
         border: 2px solid black;
     }
+    #comment-modal {
+        position: absolute;
+        width: 800px;
+        height: 100%;
+        top: 50px;
+        left: 575px;
+        background-color: white;
+        border: 2px solid black;
+    }
     #content-like-p-tag-text {
         text-align: center;
     }
@@ -340,7 +349,7 @@
         <span class="status-content"> {{ status.content }} </span>
         <br>
         <br>
-        <i ng-mousedown="single_user_ctrl.comment_icon_down($event)" ng-mouseup="single_user_ctrl.comment_icon_up($event)" class="fa fa-commenting-o fa-2x comment-icon"></i>
+        <i ng-mousedown="single_user_ctrl.comment_icon_down($event)" ng-mouseup="single_user_ctrl.comment_icon_up($event, status.content)" class="fa fa-commenting-o fa-2x comment-icon"></i>
         <span class="comment-count-text">40</span>
         <hr>
     </div>
@@ -389,4 +398,16 @@
             {{ username }}
         </li>
     </ul>
+</div>
+
+<div ng-show="single_user_ctrl.comment_modal_up" id="comment-modal">
+   <div id="modal-h1">
+       <h1 id="modal-h1-text"> <u>All Comments for this Status:</u> <input id="modal-close-btn" ng-click="single_user_ctrl.close_comment_modal()" type="button" value="X"> </h1>
+   </div>
+   <hr>
+   <div id="content-like-p-tag-text">
+       <p id="content-like-p-tag-text-2"> {{ single_user_ctrl.comment_content }}  </p>
+   </div>
+   <hr>
+   <!-- finish develping comment modal on front end and then implement functionality on backend -->
 </div>

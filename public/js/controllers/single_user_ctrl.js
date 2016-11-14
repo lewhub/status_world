@@ -281,10 +281,21 @@
                 icon.addClass("fa-commenting");
             }
 
-            vm.comment_icon_up = function(evt) {
+
+            vm.comment_modal_up = false;
+
+            vm.comment_icon_up = function(evt, content) {
                 var icon = angular.element(evt.target);
                 icon.removeClass("fa-commenting");
                 icon.addClass("fa-commenting-o");
+                vm.comment_modal_up = true;
+                vm.comment_content = content;
+            }
+
+            vm.close_comment_modal = function() {
+                console.log("closing comment modal...");
+                vm.comment_content = "";
+                vm.comment_modal_up = false;
             }
 
             function like_status_complete(res) {
@@ -334,6 +345,11 @@
                 vm.arr_for_like_modal = [];
                 vm.content_for_like_modal = "";
             }
+
+
+     
+
+
 
         }
 
