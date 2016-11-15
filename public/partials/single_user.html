@@ -265,7 +265,7 @@
         height: 515px;
         top: 50px;
         left: 575px;
-        background-color: white;
+        background-color: #FCE6C9;
         border: 2px solid black;
     }
     #comment-modal {
@@ -277,6 +277,7 @@
         background-color: white;
         border: 2px solid black;
         overflow: scroll;
+        z-index: 5;
     }
     #content-like-p-tag-text {
         text-align: center;
@@ -286,7 +287,8 @@
         padding: 20px;
     }
     .li-like-modal-text {
-        font-size: 20px;
+        font-size: 28px;
+        margin-bottom: 10px;
     }
     .comment-icon {
         position: absolute;
@@ -368,9 +370,60 @@
     .delete-comment-btn:focus {
         outline-style: none;
     }
+    .comment-like-icon {
+        font-size: 39px;
+        margin-top: 25px;
+        margin-right: 130px;
+        color: #6183A6;
+    }
+    .comment-like-icon:hover {
+        cursor: pointer;
+    }
+    .comment-like-span-text {
+        position: absolute;
+        margin-left: -115px;
+    }
+    .comment-like-span-count:hover {
+        cursor: pointer;
+    }
+    #show-who-liked-comment-ul {
+        position: fixed;
+        top: 300px;
+        font-size: 35px;
+        background: white;
+        border: 3px solid black;
+        padding: 50px;
+        border-radius: 25px;
+        margin-left: 448px;
+    }
+    #comment-like-modal {
+        position: absolute;
+        width: 800px;
+        height: 515px;
+        top: 208px;
+        left: 575px;
+        background-color: #FCE6C9;
+        border: 2px solid black;
+        z-index: 10;
+    }
+    #content-comment-like-p-text {
+        font-size: 25px;
+        padding: 20px;
+    }
+    #content-comment-like-p-text-div {
+        text-align: center;
+    }
+    .ul-usernames {
+        text-align: center;
+        list-style-type: none;
+        margin-left: -58px;
+    }
+    .li-comment-like {
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
 </style>
-<!-- complete likes implementation by allowing users who are not logged in to be able to see likes on statuses. -> done -->
-<!-- create comments for statuses on front end and back end -->
+<!-- create the ability for users to like other user's comments on front end and back end. -->
 <button ng-if="global.is_authed() && single_user_ctrl.can_logout()" id="logout-btn" ng-click="global.logout()">Logout</button>
 <button ng-show="!single_user_ctrl.editing && single_user_ctrl.can_logout() && global.is_authed()" type="button" id="edit-btn" ng-click="single_user_ctrl.begin_editing()">Edit Profile</button>
 <button ng-show="single_user_ctrl.editing" type="button" id="save-btn" ng-click="single_user_ctrl.save_updates()">Save Changes</button>
@@ -455,11 +508,25 @@
          <p id="content-like-p-tag-text-2"> {{ single_user_ctrl.content_for_like_modal }} </p>
     </div>
    
-    <ul>
+    <ul class="ul-usernames">
         <li class="li-like-modal-text" ng-repeat="username in single_user_ctrl.arr_for_like_modal">
             {{ username }}
         </li>
     </ul>
+</div>
+
+<div ng-show="single_user_ctrl.show_who_liked" id="comment-like-modal">
+    <div id="modal-h1">
+        <h1 id="modal-h1-text"> <u>Users who have liked this comment:</u> <input id="modal-close-btn" ng-click="single_user_ctrl.close_comment_like_modal()" type="button" value="X"> </h1>
+    </div>
+    <div id="content-comment-like-p-text-div">
+        <p id="content-comment-like-p-text">
+            "{{ single_user_ctrl.comment_content_for_like_ul }}"
+        </p>
+    </div>
+    <ul class="ul-usernames">
+       <li class="li-comment-like" ng-repeat="username in single_user_ctrl.comment_likes_modal_arr track by $index"> {{ username }} </li>
+   </ul>
 </div>
 
 <div ng-show="single_user_ctrl.comment_modal_up" id="comment-modal">
@@ -480,8 +547,14 @@
            <span class="comment-p-span-span">
                <span class="comment-p-span-text">written by: {{ comment.username }}</span>
            </span> 
+           <i ng-mousedown="single_user_ctrl.comment_like_down($event)" ng-mouseup="single_user_ctrl.comment_like_up($event, comment._id)" class="fa fa-thumbs-o-up fa-2x comment-like-icon"></i>
+           <br>
+           <span><span ng-click="single_user_ctrl.show_comment_like_users(comment._id)" class="comment-like-span-count">Likes</span>: <span> {{ comment.likes.length }} </span></span>
        </p>
    </div>
+
+ 
+
    <div id="comment-textarea-div">
        <textarea ng-model="single_user_ctrl.add_comment_content" id="comment-textarea" placeholder="Write a comment to share your thoughts on this post..."></textarea>
    </div>
@@ -491,5 +564,4 @@
    </div>
    <br>
    <br>
-   <!-- finish develping comment modal on front end and then implement functionality on backend -->
 </div>

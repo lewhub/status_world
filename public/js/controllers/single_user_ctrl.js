@@ -426,6 +426,92 @@
             }
 
 
+            vm.comment_like_down = function(evt) {
+                var icon = angular.element(evt.target);
+                icon.removeClass("fa-thumbs-o-up");
+                icon.addClass("fa-thumbs-up");
+            }
+
+            vm.comment_like_up = function(evt, comment_id) {
+                vm.show_who_liked = false;
+                vm.comment_like_id = comment_id;
+                vm.comment_evt = evt;
+                console.log("comment liked!");
+                var icon = angular.element(evt.target);
+                var local_id = $window.localStorage[ "current-user-id" ];
+                icon.removeClass("fa-thumbs-up");
+                icon.addClass("fa-thumbs-o-up");
+                console.log(comment_id);
+                comment_fac
+                    .like_comment(comment_id, { user_id: local_id })
+                    .then(like_comment_complete, err_callback)
+            }
+
+            function like_comment_complete(res) {
+                console.log("comment liked on backend!")
+                console.log(res)
+                if (!res.data.success) {
+                    comment_fac
+                        .dislike_comment(vm.comment_like_id, { user_id: res.config.data.user_id } )
+                        .then(comment_dislike_complete, err_callback)
+                } else {
+                    var span_text = angular.element(vm.comment_evt.target.parentElement.children[5].children[1]);
+                    span_text.text(res.data.comment.likes.length);
+                }
+            }
+
+            function comment_dislike_complete(res) {
+                console.log("comment disliked...");
+                console.log(res);
+                vm.comment_like_id = "";
+                var span_text = angular.element(vm.comment_evt.target.parentElement.children[5].children[1]);
+                span_text.text(res.data.comment.likes.length);
+            }
+
+            vm.show_who_liked = false;
+            vm.comment_likes_modal_arr = new Array();
+            vm.show_comment_like_users = function(comment_id) {
+                if (!vm.show_who_liked) {
+                    comment_fac
+                        .show(comment_id)
+                        .then(comment_found_with_user_ids, err_callback)
+                }
+            }
+
+            
+            
+
+            function comment_found_with_user_ids(res) {
+                console.log("comment found!")
+                console.log(res.data.comment.likes);
+                console.log(res.data.comment.content, "<<< comment to show content... >>>>>")
+                vm.comment_content_for_like_ul = res.data.comment.content;
+                var user_ids = res.data.comment.likes;
+                
+                for (var i = 0; i < user_ids.length; i++ ) {
+                    user_fac
+                        .show(user_ids[i])
+                        .then(user_found_for_comment_like_modal, err_callback)
+                }
+
+                vm.show_who_liked = true;
+
+            }
+
+            function user_found_for_comment_like_modal(res) {
+                console.log("username found!");
+                // console.log(res.data.user.username);
+                var username = res.data.user.username;
+                vm.comment_likes_modal_arr.push(username);
+            }
+
+            vm.close_comment_like_modal = function() {
+                vm.show_who_liked = false;
+                 vm.comment_likes_modal_arr = [];
+            }
+
+
+
         }
 
 
