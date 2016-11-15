@@ -276,6 +276,7 @@
         left: 575px;
         background-color: white;
         border: 2px solid black;
+        overflow: scroll;
     }
     #content-like-p-tag-text {
         text-align: center;
@@ -305,7 +306,68 @@
     .comment-count-text:hover {
         cursor: pointer;
     }
-
+    #add-comment-btn {
+        font-size: 28px;
+        -webkit-appearance: none;
+        background-color: white;
+        border: 2px solid gray;
+        border-radius: 25px;
+        padding: 10px 12px 10px 12px;
+        width: 220px;
+    }
+    #add-comment-btn:focus {
+        outline-style: none;
+    }
+    #add-comment-btn:active {
+        border-style: inset;
+        background-color: buttonface;
+    }
+    #add-comment-div {
+        text-align: center;
+    }
+    #comment-textarea-div {
+        text-align: center;
+    }
+    #comment-textarea {
+        font-size: 18px;
+        width: 556px;
+        height: 90px;
+        border: 5px solid rgb(90, 119, 173);
+        border-radius: 25px;
+        padding: 20px;
+    }
+    #comment-textarea:focus {
+        outline-style: none;
+    }
+    .comment-p-tag-text {
+        font-size: 23px;
+        border: 2px solid black;
+        display: inline-block;
+        padding: 20px;
+        border-radius: 25px;
+        margin-right: 50px;
+        margin-left: 50px;
+    }
+    .comment-p-tag-div {
+        text-align: center;
+        margin-top: -28px;
+    }
+    .comment-p-span-text {
+        font-size: 15px;
+    }
+    .comment-p-span-span {
+        float: right;
+        margin-right: 18px;
+    }
+    .delete-comment-btn {
+        position: relative;
+        -webkit-appearance: none;
+        font-size: 14px;
+        background: beige;
+    }
+    .delete-comment-btn:focus {
+        outline-style: none;
+    }
 </style>
 <!-- complete likes implementation by allowing users who are not logged in to be able to see likes on statuses. -> done -->
 <!-- create comments for statuses on front end and back end -->
@@ -349,8 +411,8 @@
         <span class="status-content"> {{ status.content }} </span>
         <br>
         <br>
-        <i ng-mousedown="single_user_ctrl.comment_icon_down($event)" ng-mouseup="single_user_ctrl.comment_icon_up($event, status.content)" class="fa fa-commenting-o fa-2x comment-icon"></i>
-        <span class="comment-count-text">40</span>
+        <i ng-mousedown="single_user_ctrl.comment_icon_down($event)" ng-mouseup="single_user_ctrl.comment_icon_up($event, status.content, status._id, status.comments)" class="fa fa-commenting-o fa-2x comment-icon"></i>
+        <span class="comment-count-text"> {{ status.comments.length }} </span>
         <hr>
     </div>
 </div>
@@ -409,5 +471,25 @@
        <p id="content-like-p-tag-text-2"> {{ single_user_ctrl.comment_content }}  </p>
    </div>
    <hr>
+   <br>
+   <div class="comment-p-tag-div" ng-repeat="comment in single_user_ctrl.comment_modal_arr | orderBy: '': reverse = true">
+       <p class="comment-p-tag-text">
+           {{ comment.content }}
+           <input ng-show="single_user_ctrl.can_delete_comment(comment.username) && global.is_authed()" ng-click="single_user_ctrl.delete_comment_modal(comment._id)" type="button" value="X" class="delete-comment-btn">           
+           <br>
+           <span class="comment-p-span-span">
+               <span class="comment-p-span-text">written by: {{ comment.username }}</span>
+           </span> 
+       </p>
+   </div>
+   <div id="comment-textarea-div">
+       <textarea ng-model="single_user_ctrl.add_comment_content" id="comment-textarea" placeholder="Write a comment to share your thoughts on this post..."></textarea>
+   </div>
+   <br>
+   <div id="add-comment-div">
+       <input ng-click="single_user_ctrl.add_comment_to_status()" id="add-comment-btn" type="button" value="Add Comment">
+   </div>
+   <br>
+   <br>
    <!-- finish develping comment modal on front end and then implement functionality on backend -->
 </div>

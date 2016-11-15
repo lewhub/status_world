@@ -2,9 +2,9 @@
     angular.module("blog_universe")
         .controller("SingleUserCtrl", SingleUserCtrl)
 
-        SingleUserCtrl.$inject = ["$stateParams", "user_fac", "$window", "$state", "status_fac"];
+        SingleUserCtrl.$inject = ["$stateParams", "user_fac", "$window", "$state", "status_fac", "comment_fac"];
 
-        function SingleUserCtrl($stateParams, user_fac, $window, $state, status_fac) {
+        function SingleUserCtrl($stateParams, user_fac, $window, $state, status_fac, comment_fac) {
             var vm = this;
             vm.title = "single user ctrl title";
             get_user();
@@ -283,19 +283,35 @@
 
 
             vm.comment_modal_up = false;
+            vm.comment_modal_arr = new Array();
 
-            vm.comment_icon_up = function(evt, content) {
+            vm.comment_icon_up = function(evt, content, status_id, comments) {
                 var icon = angular.element(evt.target);
                 icon.removeClass("fa-commenting");
                 icon.addClass("fa-commenting-o");
                 vm.comment_modal_up = true;
                 vm.comment_content = content;
+                vm.comment_status_id_modal = status_id;
+                for (var i = 0; i < comments.length; i++) {
+                    comment_fac
+                        .show(comments[i])
+                        .then(add_to_comment_arr, err_callback)
+                }
+            }
+            
+
+            function add_to_comment_arr(res){
+                var com = res.data.comment;
+                vm.comment_modal_arr.push(com);
             }
 
             vm.close_comment_modal = function() {
                 console.log("closing comment modal...");
                 vm.comment_content = "";
                 vm.comment_modal_up = false;
+                vm.comment_modal_arr = [];
+                vm.comment_status_id_modal = "";
+                get_user();
             }
 
             function like_status_complete(res) {
@@ -348,7 +364,66 @@
 
 
      
+            vm.add_comment_to_status = function() {
+                console.log("beggining to add comment...");
+                var local_username = $window.localStorage["current-user-username"];
+                console.log(vm.add_comment_content);
+                comment_fac
+                    .create(vm.comment_status_id_modal, {content: vm.add_comment_content, username: local_username})
+                    .then(comment_create_complete, err_callback)
+               
+            }
 
+            function comment_create_complete(res) {
+                console.log("comment created on backend...");
+                console.log(res);
+                vm.add_comment_content = "";
+                status_fac
+                    .show(res.data.status._id)
+                    .then(status_found_comment, err_callback)
+            }
+
+            function status_found_comment(res) {
+                vm.comment_modal_arr = [];
+                var comments = res.data.status.comments
+                console.log(res.data.status.comments)
+              
+                console.log("status found <<<<>>>>")
+                  for (var i = 0; i < comments.length; i++) {
+                    comment_fac
+                        .show(comments[i])
+                        .then(add_to_comment_arr, err_callback)
+                }
+            }
+
+            vm.delete_comment_modal = function(comment_id) {
+                console.log("beginning to delete comment...");
+                console.log(comment_id);
+                comment_fac
+                    .remove_comment(comment_id)
+                    .then(comment_delete_complete, err_callback)
+            }
+
+            function comment_delete_complete(res) {
+                console.log("comment deleted...");
+                console.log(res);
+                vm.comment_modal_arr = [];
+                var comments = res.data.status.comments
+
+                for (var i = 0; i < comments.length; i++) {
+                    comment_fac
+                        .show(comments[i])
+                        .then(add_to_comment_arr, err_callback)
+                }
+            }
+
+            vm.can_delete_comment = function(username){
+                if (username === $window.localStorage["current-user-username"]) {
+                    return true;
+                } else {
+                    return false
+                }
+            }
 
 
         }

@@ -16,6 +16,7 @@
 					if (response.data.token) {
 						$window.localStorage["current-user-id"] = response.data.user._id;
 						$window.localStorage["user-jwt-token"] = response.data.token;
+						$window.localStorage["current-user-username"] = response.data.user.username;
 					}
 					return response;
 				}

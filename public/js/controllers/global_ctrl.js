@@ -61,6 +61,7 @@
                 console.log("logging out...");
                 $window.localStorage.removeItem("user-jwt-token");
                 $window.localStorage.removeItem("current-user-id");
+                $window.localStorage.removeItem("current-user-username");
                 $state.go("home");
             }
 

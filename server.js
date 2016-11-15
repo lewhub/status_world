@@ -7,6 +7,7 @@ var path = require("path");
 var morgan = require("morgan");
 var user_rts = require("./routes/user_rts.js");
 var status_rts = require("./routes/status_rts.js");
+var comment_rts = require("./routes/comment_rts.js");
 var dotenv = require("dotenv").load({ silent: true });
 
 // for local mongo shell db testing
@@ -25,6 +26,7 @@ app.use("/public", express.static(path.join( __dirname, "public" )));
 app.use( morgan("dev") );
 app.use("/users", user_rts);
 app.use("/statuses", status_rts);
+app.use("/comments", comment_rts);
 
 app.get( "/", function(req, res) {
     res.sendFile( path.join(__dirname, "public", "index.html") );
