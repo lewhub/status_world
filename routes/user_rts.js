@@ -14,6 +14,8 @@ user_router.route("/")
 
 user_router.patch("/password-change/:id", user_ctrl.verify_password_change);
 user_router.patch("/password-change-confirmed/:id", user_ctrl.change_password);
+user_router.post("/follow/:id", user_ctrl.follow);
+user_router.post("/unfollow/:id", user_ctrl.unfollow);
 user_router.route("/:id")
     .get( user_ctrl.show )
     .patch( user_ctrl.update )

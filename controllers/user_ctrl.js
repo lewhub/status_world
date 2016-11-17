@@ -27,7 +27,7 @@ module.exports = {
         new_user.save( function(err, user) {
             if (err) return console.log(err)
             var token = jwt.sign(user.toObject(), process.env.secret, {
-                expiresIn: 1440
+                expiresIn: 3000
             })
             res.json( { success: true, message: "New User Created...", user: user, token: token } )
         } )
@@ -129,5 +129,55 @@ module.exports = {
                     })
             })
       
-    } 
+    },
+    /*
+
+        when you follow someone, you gain one following and they gain one follower
+        when someone follows you, you gain one follower and they gain one following
+
+    */
+    follow: function(req, res) {
+        User
+            .findOne( { _id: req.params.id } )
+            .exec( function(err, user) {
+                if (err) return console.log(err)
+                User
+                    .findOne( { _id: req.body.user_to_follow } )
+                    .exec( function(err, user_to_follow){
+                        if (err) return console.log(err)
+                        if (user.following.indexOf(user_to_follow._id) !== -1) return res.json({ success: false, message: "you are already following this user.", user: user, user_to_follow: user_to_follow })
+                        user.following.push(user_to_follow._id);
+                        user.save( function(err, user){
+                            if (err) return console.log(err)
+                            user_to_follow.followers.push(user._id)
+                            user_to_follow.save( function(err, user_to_follow) {
+                                if (err) return console.log(err)
+                                res.json( { success: true, message: "user followed.", user: user, user_to_follow: user_to_follow } )
+                            })
+                        })
+                    })
+            })
+    },
+    unfollow: function(req, res) {
+        User
+            .findOne( { _id: req.params.id } )
+            .exec( function(err, user) {
+                if (err) return console.log(err)
+                User
+                    .findOne( { _id: req.body.user_to_unfollow } )
+                    .exec( function(err, user_to_unfollow) {
+                        if (err) return console.log(err)
+                        user.following.pull(user_to_unfollow._id);
+                        user.save( function(err, user) {
+                            if (err) return console.log(err)
+                            user_to_unfollow.followers.pull(user._id);
+                            user_to_unfollow.save( function(err, user_to_unfollow) {
+                                if (err) return console.log(err)
+                                res.json( { success: true, message: "user unfollowed.", user: user, user_to_unfollow: user_to_unfollow } );
+                            })
+                        })
+                    })
+            })
+    }
+    
 }

@@ -478,9 +478,6 @@
                 }
             }
 
-            
-            
-
             function comment_found_with_user_ids(res) {
                 console.log("comment found!")
                 console.log(res.data.comment.likes);
@@ -510,6 +507,130 @@
                  vm.comment_likes_modal_arr = [];
             }
 
+
+
+            // follow and unfollow
+
+            vm.follow = function() {
+                console.log("beggining to follow user...");
+                var local_id = $window.localStorage["current-user-id"];
+                var user_to_follow_id = vm.user_details._id;
+                user_fac
+                    .follow(local_id, { user_to_follow: user_to_follow_id } )
+                    .then(follow_complete, err_callback)
+            }
+
+            function follow_complete(res) {
+                console.log("user followed on backend!");
+                console.log(res);
+                if (!res.data.success) {
+                    user_fac
+                        .unfollow( res.data.user._id, { user_to_unfollow: res.data.user_to_follow._id } )
+                        .then(unfollow_complete, err_callback)
+                } else {
+                    get_user();
+                }
+
+            }
+
+            function unfollow_complete(res) {
+                console.log("user unfollowed...");
+                console.log(res);
+                get_user();
+            }
+
+            vm.check_if_following = function(evt) {
+                console.log("checking if you are following this user...");
+                var follow_btn = angular.element(evt.target);
+                var local_id = $window.localStorage["current-user-id"];
+                var user_to_follow_followers = vm.user_details.followers;
+                if (user_to_follow_followers.indexOf(local_id) !== -1) {
+                    follow_btn.val("Unfollow");
+                    follow_btn.css( { "margin-left": "436px" } );
+                }
+            }
+
+            vm.change_back_to_default = function(evt) {
+                var follow_btn = angular.element(evt.target);
+                follow_btn.val("Follow");
+                follow_btn.css( { "margin-left": "463px" } );
+            }
+
+            vm.check_if_on_profile = function() {
+                
+                if (vm.user_details) {
+                    var id = vm.user_details._id;
+                    var local_id = $window.localStorage["current-user-id"];
+                    if (id === local_id) {
+                        console.log("viewing profile")
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+              
+            }
+
+            vm.followers_icon_down = function(evt) {
+                var icon = angular.element(evt.target);
+                icon.removeClass("fa-caret-down");
+                icon.addClass("fa-caret-square-o-down");
+            }
+
+            vm.followers_modal_arr = new Array();
+            vm.show_followers_modal = false;
+
+            vm.followers_icon_up = function(evt) {
+                console.log("beggining to show followers...");           
+                var icon = angular.element(evt.target);
+                icon.removeClass("fa-caret-square-o-down");
+                icon.addClass("fa-caret-down");
+                var followers = vm.user_details.followers;
+                for ( var i = 0; i < followers.length; i++ ) {
+                    user_fac
+                        .show(followers[i])
+                        .then(add_user_to_followers_modal_arr, err_callback)
+                }
+
+                vm.show_followers_modal = true;
+
+            }
+
+            function add_user_to_followers_modal_arr(res) {
+                console.log("adding user...");
+                var username = res.data.user.username;
+                vm.followers_modal_arr.push(username);
+            }
+
+            vm.close_followers_modal = function() {
+                vm.show_followers_modal = false;
+                vm.followers_modal_arr = [];
+            }
+
+            vm.following_icon_down = function(evt) {
+                var icon = angular.element(evt.target);
+                icon.removeClass("fa-caret-down");
+                icon.addClass("fa-caret-square-o-down");
+            }
+            
+            // finish showing following modal
+
+            vm.following_icon_up = function(evt) {
+                console.log("beggining to show following");
+                var icon = angular.element(evt.target);
+                icon.removeClass("fa-caret-square-o-down");
+                icon.addClass("fa-caret-down");
+                var following = vm.user_details.following;
+                for ( var i = 0; i < following.length; i++ ) {
+                    user_fac
+                        .show(following[i])
+                        .then(add_user_to_following_modal_arr, err_callback)
+                }
+                vm.show_following_modal = true;
+            }
+
+
+            //
 
 
         }

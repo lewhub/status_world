@@ -422,8 +422,79 @@
         font-size: 28px;
         margin-bottom: 10px;
     }
+    #followers-span {
+        margin-right: 22px;
+        margin-left: 8px;
+        font-size: 28px;
+        border: 1px solid black;
+        padding: 20px;
+        border-radius: 6px;
+    }
+    #following-span {
+        font-size: 28px;
+        border: 1px solid black;
+        padding: 20px;
+        border-radius: 6px;
+    }
+    #follow-btn {
+        -webkit-appearance: none;
+        font-size: 38px;
+        margin-left: 463px;
+        padding-left: 20px;
+        padding-right: 20px;
+        background: wheat;
+        border-radius: 22px;
+        border-style: solid;
+        border-color: gray;
+    }
+    #follow-btn:focus {
+        outline-style: none;
+    }
+    #follow-btn:active {
+        border-style: inset;
+        background-color: #CDB38B;
+    }
+    #follow-btn:hover {
+        cursor: pointer;
+    }
+    .show-followers-caret {
+        font-size: 21px;
+        color: darkblue;
+        position: absolute;
+        margin-left: -2px;
+    }
+    .show-followers-caret:hover {
+        cursor: pointer;
+    }
+    .show-following-caret {
+        font-size: 21px;
+        color: darkblue;
+        position: absolute;
+        margin-left: -2px;
+    }
+    .show-following-caret:hover {
+        cursor: pointer;
+    }
+    #followers-modal {
+        position: absolute;
+        width: 800px;
+        height: 515px;
+        top: 50px;
+        left: 575px;
+        background-color: #FCE6C9;
+        border: 2px solid black;
+    }
+    .followers-usernames {
+        font-size: 30px;
+        margin-bottom: 17px;
+        border: 1px solid black;
+        border-radius: 10px;
+        padding: 10px;
+        width: 113px;
+        margin-left: 43%;
+    }
 </style>
-<!-- create the ability for users to like other user's comments on front end and back end. -->
+<!-- create the ability to follow and unfollow users on front end and back end. -->
 <button ng-if="global.is_authed() && single_user_ctrl.can_logout()" id="logout-btn" ng-click="global.logout()">Logout</button>
 <button ng-show="!single_user_ctrl.editing && single_user_ctrl.can_logout() && global.is_authed()" type="button" id="edit-btn" ng-click="single_user_ctrl.begin_editing()">Edit Profile</button>
 <button ng-show="single_user_ctrl.editing" type="button" id="save-btn" ng-click="single_user_ctrl.save_updates()">Save Changes</button>
@@ -444,6 +515,27 @@
 <div id="single-user-heading-div">
     <h1 ng-show="!single_user_ctrl.editing"> <u>{{ single_user_ctrl.user_details.username }}'s Profile</u> </h1>
     <h1 ng-show="single_user_ctrl.editing"> <input id="username-edit" type="text" ng-model="single_user_ctrl.user_details.username"> </h1>
+</div>
+<div>
+    <span id="followers-span">
+        Followers: 
+        <span>
+             {{ single_user_ctrl.user_details.followers.length }} 
+        </span>
+        <span>
+            <i ng-mousedown="single_user_ctrl.followers_icon_down($event)" ng-mouseup="single_user_ctrl.followers_icon_up($event)" class="fa fa-caret-down show-followers-caret"></i>
+        </span>
+    </span>
+
+    <span id="following-span">
+        Following:
+        <span>
+            {{ single_user_ctrl.user_details.following.length }}
+        </span>
+        <i ng-mousedown="single_user_ctrl.following_icon_down($event)" ng-mouseup="single_user_ctrl.following_icon_up($event)" class="fa fa-caret-down show-following-caret"></i>
+    </span>
+
+    <input ng-show="single_user_ctrl.check_if_on_profile()" ng-mouseover="single_user_ctrl.check_if_following($event)" ng-mouseleave="single_user_ctrl.change_back_to_default($event)" ng-click="single_user_ctrl.follow()" id="follow-btn" type="button" value="Follow">
 </div>
 <div id="user-email-div">
     <ul id="email-ul">
@@ -512,6 +604,19 @@
         <li class="li-like-modal-text" ng-repeat="username in single_user_ctrl.arr_for_like_modal">
             {{ username }}
         </li>
+    </ul>
+</div>
+
+<!-- followers modal -->
+<div id="followers-modal" ng-show="single_user_ctrl.show_followers_modal">
+    <div id="modal-h1">
+        <h1 id="modal-h1-text"> <u> {{ single_user_ctrl.user_details.username }}'s Followers: </u> <input id="modal-close-btn" type="button" value="X" ng-click="single_user_ctrl.close_followers_modal()"> </h1>
+    </div>
+    <ul class="ul-usernames">
+        <li class="followers-usernames" ng-repeat="username in single_user_ctrl.followers_modal_arr">
+            {{ username }}
+        </li>
+     
     </ul>
 </div>
 
