@@ -6,11 +6,15 @@
 		var api = "https://status-universe.herokuapp.com/users/";
 		var api_pw_url = "https://status-universe.herokuapp.com/users/password-change/";
 		var api_pw_url_confirmed = "https://status-universe.herokuapp.com/users/password-change-confirmed/";
+		var api_follow = "https://status-universe.herokuapp.com/users/follow/";
+		var api_unfollow = "https://status-universe.herokuapp.com/users/unfollow/";
+
 		// var api = "/users/";
 		// var api_pw_url = "/users/password-change/";
 		// var api_pw_url_confirmed = "/users/password-change-confirmed/";
-		var api_follow = "https://status-universe.herokuapp.com/users/follow/";
-		var api_unfollow = "https://status-universe.herokuapp.com/users/unfollow/";
+		// var api_follow = "/users/follow/";
+		// var api_unfollow = "/users/unfollow/";
+
 		var service = {
 			index: index,
 			show: show,

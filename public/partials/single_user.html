@@ -512,7 +512,25 @@
 <nav>
     <div class="nav-wrapper indigo">
         <a ui-sref="home" class="brand-logo home-logo-text-nav">Status Universe</a>
+        <a href="#" data-activates="mobile-user-slide" class="button-collapse"><i class="fa fa-bars fa-3x"></i></a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li ng-if="!global.is_authed() && !global.at_signup">
+                <a ui-sref="sign-up">Sign Up</a>
+            </li>
+            <li ng-if="!global.is_authed() && !global.at_login">
+                <a ui-sref="login">Login</a>
+            </li>
+            <li ng-if="global.is_authed() && !global.at_profile">
+                <a ui-sref="single-user({ id: global.current_user_id() })">Profile</a>
+            </li>
+            <li ng-if="global.is_authed()">
+                <a ui-sref="feed( { id: global.current_user_id() } )">Status Feed</a>
+            </li>
+            <li ng-if="global.is_authed() && single_user_ctrl.can_logout()">
+                <a ui-sref="home" ng-click="global.logout()">Logout</a>
+            </li>
+        </ul>
+         <ul id="mobile-user-slide" class="side-nav">
             <li ng-if="!global.is_authed() && !global.at_signup">
                 <a ui-sref="sign-up">Sign Up</a>
             </li>
@@ -750,3 +768,9 @@
    <br>
    <br>
 </div>
+
+<script>
+    $(document).ready(function(){
+        $(".button-collapse").sideNav();
+    })
+</script>
