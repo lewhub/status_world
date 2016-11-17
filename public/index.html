@@ -13,15 +13,12 @@
     <script src="./public/js/controllers/signup_ctrl.js"></script>
     <script src="./public/js/controllers/login_ctrl.js"></script>
     <script src="./public/js/controllers/global_ctrl.js"></script>
+    <script src="./public/js/controllers/feed_ctrl.js"></script>
 	<script src="./public/js/factories/user_fac.js"></script>
     <script src="./public/js/factories/status_fac.js"></script>
     <script src="./public/js/factories/comment_fac.js"></script>
     </head>
     <body ng-app="blog_universe" ng-controller="GlobalController as global">
-        <a class="nav-button" ui-sref="home">Home</a>
-        <a ng-if="!global.is_authed() && !global.at_signup" class="nav-button" ui-sref="sign-up">Sign-Up</a>
-        <a ng-if="!global.is_authed() && !global.at_login" class="nav-button" ui-sref="login">Login</a>
-        <a ng-if="global.is_authed() && !global.at_profile" class="nav-button" ui-sref="single-user({ id: global.current_user_id() })">Profile</a>
         <div ui-view></div>
     </body>
 </html>

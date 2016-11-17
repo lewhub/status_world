@@ -32,6 +32,13 @@
         outline-style: none;
     }
 </style>
+
+<a class="nav-button" ui-sref="home">Home</a>
+<a ng-if="!global.is_authed() && !global.at_signup" class="nav-button" ui-sref="sign-up">Sign-Up</a>
+<a ng-if="!global.is_authed() && !global.at_login" class="nav-button" ui-sref="login">Login</a>
+<a ng-if="global.is_authed() && !global.at_profile" class="nav-button" ui-sref="single-user({ id: global.current_user_id() })">Profile</a>
+<a ng-if="global.is_authed()" ui-sref="feed( { id: global.current_user_id() } )" class="nav-button">Status Feed</a>
+
 <div id="login-h1">
     <h1> <u>Please Login</u> </h1>
 </div>

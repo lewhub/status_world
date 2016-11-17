@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
 <style>
     #username:hover {
         color: blue;
@@ -11,17 +12,57 @@
         font-size: 30px;
         text-align: center;
     }
-    #user-heading {
-        text-align: center;
+    .username-a-text {
+        color: white;
+    }
+    .username-a-text:active {
+        color: darkblue;
+    }
+    .email-span-text {
+        font-size: 18px;
     }
 </style>
-<div id="user-heading">
-    <h2><u>Click on a username to view posts.</u></h2>
-</div>
-<div class="user-block" ng-repeat="user in home_ctrl.all_users">
-    <span>Username: <a id="username" ui-sref="single-user({id: user._id})">{{ user.username }}</a></span>
-    <br>
-    <br>
-    <span>Email: {{ user.email }}</span>
-    <hr>
+
+<nav>
+    <div class="nav-wrapper indigo">
+        <a ui-sref="home" class="brand-logo home-logo-text-nav">Status Universe</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li ng-if="!global.is_authed() && !global.at_signup">
+                <a ui-sref="sign-up">Sign Up</a>
+            </li>
+            <li ng-if="!global.is_authed() && !global.at_login">
+                <a ui-sref="login">Login</a>
+            </li>
+            <li ng-if="global.is_authed() && !global.at_profile">
+                <a ui-sref="single-user({ id: global.current_user_id() })">Profile</a>
+            </li>
+            <li ng-if="global.is_authed()">
+                <a ui-sref="feed( { id: global.current_user_id() } )">Status Feed</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+
+    <h3><u>Click on a username to view posts:</u></h3>
+
+    <div class="row" ng-repeat="user in home_ctrl.all_users">
+        <div class="col s12 m5">
+            <div class="card-panel indigo lighten-1">
+                <h4 class="white-text">
+                    Username:
+                    <a class="username-a-text" ui-sref="single-user( { id: user._id } )">
+                        {{ user.username }}
+                    </a>
+                </h4>
+                <span class="white-text email-span-text">
+                    Email:
+                    {{ user.email }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+
 </div>

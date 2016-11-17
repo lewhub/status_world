@@ -44,5 +44,10 @@
 				templateUrl: "public/partials/login.html",
 				controller: "LoginCtrl as login_ctrl"
 			})
+			.state("feed", {
+				url: "/feed/:id",
+				templateUrl: "public/partials/feed.html",
+				controller: "FeedCtrl as feed_ctrl"
+			})
 	})
 }())

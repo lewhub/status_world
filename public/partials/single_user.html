@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
 <style>
     #single-user-heading-div {
         text-align: center;
@@ -39,9 +40,11 @@
     }
     #username-edit {
         font-size: 20px;
+        width: 400px;
     }
     #email-edit {
         font-size: 20px;
+        width: 800px;
     }
     #cancel-btn {
         padding: 5px;
@@ -139,6 +142,7 @@
     }
     #modal-h1-text {
         margin-left: 64px;
+        font-size: 30px;
     }
     #modal-textarea-div {
         text-align: center;
@@ -234,18 +238,13 @@
         background-color: #C0D9AF;
     }
     .heart-btn {
-        position: absolute;
-        left: 35px;
-        margin-top: -8px;
         color: #00688B;
     }
     .heart-btn:hover {
         cursor: pointer;
     }
     .heart-btn-text {
-        position: absolute;
-        left: 28px;
-        margin-top: 11px;
+     
     }
     .heart-btn-text:hover {
         color: #42647F;
@@ -291,22 +290,16 @@
         margin-bottom: 10px;
     }
     .comment-icon {
-        position: absolute;
-        margin-top: -33px;
-        right: 112px;
         color: #00688B;
+        float: right;
     }
     .comment-icon:hover {
         cursor: pointer;
     }
     .comment-count-text {
-        position: absolute;
-        right: 97px;
         font-size: 18px;
-        margin-top: -14px;
-    }
-    .comment-count-text:hover {
-        cursor: pointer;
+        margin-top: 15px;
+        float: right;
     }
     #add-comment-btn {
         font-size: 28px;
@@ -490,12 +483,58 @@
         border: 1px solid black;
         border-radius: 10px;
         padding: 10px;
-        width: 113px;
+        width: 200px;
         margin-left: 43%;
     }
+    #following-modal {
+        position: absolute;
+        width: 800px;
+        height: 830px;
+        top: 50px;
+        left: 575px;
+        background-color: #FCE6C9;
+        border: 2px solid black;
+    }
+    .following-usernames {
+        font-size: 30px;
+        margin-bottom: 17px;
+        border: 1px solid black;
+        border-radius: 10px;
+        padding: 10px;
+        width: 200px;
+        margin-left: 43%;
+    }
+    .status-content-p-tag-text-card {
+        font-size: 18px;
+    }
 </style>
+
+<nav>
+    <div class="nav-wrapper indigo">
+        <a ui-sref="home" class="brand-logo home-logo-text-nav">Status Universe</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li ng-if="!global.is_authed() && !global.at_signup">
+                <a ui-sref="sign-up">Sign Up</a>
+            </li>
+            <li ng-if="!global.is_authed() && !global.at_login">
+                <a ui-sref="login">Login</a>
+            </li>
+            <li ng-if="global.is_authed() && !global.at_profile">
+                <a ui-sref="single-user({ id: global.current_user_id() })">Profile</a>
+            </li>
+            <li ng-if="global.is_authed()">
+                <a ui-sref="feed( { id: global.current_user_id() } )">Status Feed</a>
+            </li>
+            <li ng-if="global.is_authed() && single_user_ctrl.can_logout()">
+                <a ui-sref="home" ng-click="global.logout()">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
 <!-- create the ability to follow and unfollow users on front end and back end. -->
-<button ng-if="global.is_authed() && single_user_ctrl.can_logout()" id="logout-btn" ng-click="global.logout()">Logout</button>
+
 <button ng-show="!single_user_ctrl.editing && single_user_ctrl.can_logout() && global.is_authed()" type="button" id="edit-btn" ng-click="single_user_ctrl.begin_editing()">Edit Profile</button>
 <button ng-show="single_user_ctrl.editing" type="button" id="save-btn" ng-click="single_user_ctrl.save_updates()">Save Changes</button>
 <button ng-show="single_user_ctrl.editing" type="button" id="cancel-btn" ng-click="single_user_ctrl.cancel_changes()">Cancel</button>
@@ -547,6 +586,8 @@
 <div>
     <h1> Statuses <button ng-show="single_user_ctrl.can_logout() && global.is_authed()" ng-click="single_user_ctrl.bring_up_modal()" id="new-status-btn" type="button"><span id="new-status-text">+</span></button> </h1>
     <hr>
+
+<!--
     <div class="status-div" ng-repeat="status in single_user_ctrl.user_details.statuses | orderBy: '': reverse = true">
         <input ng-click="single_user_ctrl.delete_status($index)" ng-show="single_user_ctrl.editing && !single_user_ctrl.edit_modal_up" class="delete-status-btn" type="button" value="X">
         <input ng-click="single_user_ctrl.bring_up_edit_modal($index, $event)" ng-show="single_user_ctrl.editing && !single_user_ctrl.edit_modal_up" class="edit-status-btn" type="button" value="Edit Status">
@@ -559,7 +600,31 @@
         <i ng-mousedown="single_user_ctrl.comment_icon_down($event)" ng-mouseup="single_user_ctrl.comment_icon_up($event, status.content, status._id, status.comments)" class="fa fa-commenting-o fa-2x comment-icon"></i>
         <span class="comment-count-text"> {{ status.comments.length }} </span>
         <hr>
+    </div>-->
+
+    <div class="container" ng-repeat="status in single_user_ctrl.user_details.statuses | orderBy: '': reverse = true;">
+        <div class="row">
+            <div class="col s12 m6">
+                <div class="card">
+                    <div class="card-content">
+                        <input ng-click="single_user_ctrl.delete_status($index)" ng-show="single_user_ctrl.editing && !single_user_ctrl.edit_modal_up" class="delete-status-btn" type="button" value="X">
+                        <input ng-click="single_user_ctrl.bring_up_edit_modal($index, $event)" ng-show="single_user_ctrl.editing && !single_user_ctrl.edit_modal_up" class="edit-status-btn" type="button" value="Edit Status">
+                        <p class="status-content-p-tag-text-card"> {{ status.content }} </p>
+                    </div>
+                    <div class="card-action">
+                        <i ng-mousedown="single_user_ctrl.heart_button_clicked($event, global.is_authed())" ng-mouseup="single_user_ctrl.heart_button_up($event, status._id, status.content, global.is_authed())" class="fa fa-heart-o fa-2x heart-btn"></i>
+                        <span ng-click="single_user_ctrl.show_liked_users_modal(status.likes, status.content)" class="heart-btn-text"> {{ status.likes.length }} </span>
+
+                        <span class="comment-count-text"> {{ status.comments.length }} </span>
+                        <i ng-mousedown="single_user_ctrl.comment_icon_down($event)" ng-mouseup="single_user_ctrl.comment_icon_up($event, status.content, status._id, status.comments)" class="fa fa-commenting-o fa-2x comment-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+
+
 </div>
 
 <div ng-show="single_user_ctrl.modal_up" id="new-status-form">
@@ -617,6 +682,21 @@
             {{ username }}
         </li>
      
+    </ul>
+</div>
+
+<!-- following modal -->
+<div id="following-modal" ng-show="single_user_ctrl.show_following_modal">
+    <div id="modal-h1">
+        <h1 id="modal-h1-text">
+            <u> Who {{ single_user_ctrl.user_details.username }} is Following: </u>
+            <input id="modal-close-btn" type="button" value="X" ng-click="single_user_ctrl.close_following_modal()">
+        </h1>
+    </div>
+    <ul class="ul-usernames">
+        <li class="following-usernames" ng-repeat="username in single_user_ctrl.show_following_modal_arr">
+            {{ username }}
+        </li>
     </ul>
 </div>
 

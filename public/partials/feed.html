@@ -1,0 +1,87 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+<style>
+    .status-li {
+        border: 1px solid black;
+        padding: 20px;
+        margin-bottom: 10px;
+    }
+    .comment-count-span {
+        font-size: 20px;
+        margin-right: 13px;
+        color: #FFFACD;
+    }
+    .like-count-span {
+        font-size: 20px;
+        color: #FFFACD;
+    }
+    .card-p-text {
+        font-family: serif;
+        font-size: 17px;
+    }
+    .status-username-a-text {
+        color: white;
+    }
+    .status-username-a-text:active {
+        color: darkblue;
+    }
+</style>
+
+<nav>
+    <div class="nav-wrapper indigo">
+        <a ui-sref="home" class="brand-logo home-logo-text-nav">Status Universe</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li ng-if="!global.is_authed() && !global.at_signup">
+                <a ui-sref="sign-up">Sign Up</a>
+            </li>
+            <li ng-if="!global.is_authed() && !global.at_login">
+                <a ui-sref="login">Login</a>
+            </li>
+            <li ng-if="global.is_authed() && !global.at_profile" >
+                <a ui-sref="single-user({ id: global.current_user_id() })">Profile</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+
+    <h1> <u>Status Feed</u> </h1>
+
+<!--<ul>
+    <li class="status-li" ng-repeat="status in feed_ctrl.status_feed">
+        <span>
+            Username: {{ status.username }}
+        </span>
+        <span>
+            Content: {{ status.content }}
+        </span>
+        <span>
+            Comments: {{ status.comment_count }}
+        </span>
+        <span>
+            Likes: {{ status.like_count }}
+        </span>
+        <br>
+        <br>
+    </li>
+</ul>-->
+
+    <div ng-repeat="status in feed_ctrl.status_feed" class="row">
+        <div class="col s12 m6">
+            <div class="card indigo darken-1">
+                <div class="card-content white-text">
+                    <span class="card-title">
+                        <a class="status-username-a-text" ui-sref="single-user( { id: status.user_id } )"> {{ status.username }} </a>
+                    </span>
+                    <p class="card-p-text">
+                        {{ status.content }}
+                    </p>
+                </div>
+                <div class="card-action">
+                    <span class="comment-count-span"> Comments: <span> {{ status.comment_count }} </span> </span>
+                    <span class="like-count-span"> Likes: {{ status.like_count }} </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

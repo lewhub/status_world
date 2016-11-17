@@ -615,6 +615,9 @@
             
             // finish showing following modal
 
+            vm.show_following_modal = false;
+            vm.show_following_modal_arr = new Array();
+
             vm.following_icon_up = function(evt) {
                 console.log("beggining to show following");
                 var icon = angular.element(evt.target);
@@ -627,6 +630,19 @@
                         .then(add_user_to_following_modal_arr, err_callback)
                 }
                 vm.show_following_modal = true;
+            }
+
+            function add_user_to_following_modal_arr(res) {
+                console.log("adding username to following array...");
+                var username = res.data.user.username;
+                console.log(vm.show_following_modal_arr);
+                vm.show_following_modal_arr.push(username);
+            }
+
+            vm.close_following_modal = function() {
+                console.log( "closing following modal..." );
+                vm.show_following_modal = false;
+                vm.user_following_modal_arr = [];
             }
 
 
