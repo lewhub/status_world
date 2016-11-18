@@ -47,6 +47,7 @@
                     obj_to_add.comment_count = status_arr[i].comments.length;
                     obj_to_add.like_count = status_arr[i].likes.length;
                     obj_to_add.user_id = id;
+                    obj_to_add.image = status_arr[i].image;
                     vm.status_feed.push(obj_to_add);
                 }
                

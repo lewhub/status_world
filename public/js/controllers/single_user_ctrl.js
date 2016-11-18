@@ -163,6 +163,11 @@
            
 
             vm.create_new_status = function() {
+                if (vm.photo_url) {
+                    console.log(vm.photo_url, "not null");
+                    vm.new_status.image = vm.photo_url;
+                    vm.photo_url = "";
+                }
                 console.log("creating new status...");
                 console.log(vm.new_status);
                 var local_id = $window.localStorage["current-user-id"];
@@ -562,7 +567,7 @@
                     var id = vm.user_details._id;
                     var local_id = $window.localStorage["current-user-id"];
                     if (id === local_id) {
-                        console.log("viewing profile")
+                        // console.log("viewing profile")
                         return false;
                     } else {
                         return true;
@@ -647,6 +652,68 @@
 
 
             //
+
+            vm.change_class_x = function(evt){
+                var icon = angular.element(evt.target);
+                icon.removeClass("fa-times-circle-o");
+                icon.addClass("fa-times-circle")
+            }
+
+            vm.change_class_x_up = function(evt){
+                var icon = angular.element(evt.target);
+                icon.removeClass("fa-times-circle");
+                icon.addClass("fa-times-circle-o")
+                vm.filename = "";
+                vm.photo_url = "";
+                var upload_btn = angular.element(document.querySelector("#upload-img-btn"));
+                upload_btn.css({"display": "inline-block"})
+                var span_div = angular.element(document.querySelector("#show-filename-text"));
+                span_div.css({"display": "none"});
+                var span_div_icon = angular.element(document.querySelector(".remove-upload-icon"));
+                span_div_icon.css({"display": "none"});
+                
+            }
+
+            vm.say_something = function(){console.log("something")}
+            // photo upload
+            vm.photo_attached = false;
+            vm.upload_image = function(evt) {
+                console.log("beginning to upload image");
+                filepicker.setKey("AxGm6Nb8rTPyGLzI0VcuEz");
+                filepicker.pick({
+                    container: "modal",
+                    mimetype: "image/*",
+                    services: ["COMPUTER"]
+                },
+                function(res){
+                    console.log("photo uploaded successfully to file picker and url generated!")
+                    vm.photo_attached = true;
+                    vm.filename = res.filename;
+                    vm.photo_url = res.url;
+                    var btn = angular.element(evt.target);
+                    btn.css( { "display": "none" } );
+                    var span_div = angular.element(document.querySelector("#show-filename-text"));
+                    span_div.css({"display": "inline-block"})
+                    span_div.html("<u>" + vm.filename + "</u>");
+                    var remove_x = angular.element(document.querySelector(".remove-upload-icon"));
+                    remove_x.css({"display": "inline-block", "position": "relative", "margin-left": "-40px"});
+                    console.log(res);                    
+                }, function(err){
+                    console.log("error")
+                    console.log(err)
+                })
+            }
+
+            
+        
+
+            vm.check_if_photo = function() {
+                if (vm.filename) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
 
 
         }

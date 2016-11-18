@@ -104,7 +104,7 @@
     #new-status-form {
         position: absolute;
         width: 800px;
-        height: 515px;
+        height: 600px;
         top: 50px;
         left: 575px;
         background-color: white;
@@ -507,6 +507,48 @@
     .status-content-p-tag-text-card {
         font-size: 18px;
     }
+    #upload-img-btn {
+        -webkit-appearance: none;
+        font-size: 22px;
+        border-radius: 22px;
+        padding-left: 10px;
+        padding-right: 10px;
+        background-color: wheat;
+        border-style: solid;
+        border-color: gray;
+    }
+    #upload-img-btn:focus {
+        outline-style: none;
+    }
+    #upload-img-btn:active {
+        border-style: inset;
+        background-color: #A0522D;
+    }
+    #upload-img-btn-div {
+        text-align: center;
+    }
+    #show-filename-text {
+        display: none;
+        font-size: 18px;
+        border: 1px solid darkblue;
+        width: 180px;
+        border-radius: 11px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+    }
+    .remove-upload-icon {
+        margin-left: 22px;
+        position: absolute;
+        margin-top: -5px;
+        display: none;
+        color: darkblue;
+    }
+    .remove-upload-icon:hover {
+        cursor: pointer;
+    }
+    .make-bigger {
+        font-size: 40px !important;
+    }
 </style>
 
 <nav>
@@ -532,19 +574,19 @@
         </ul>
          <ul id="mobile-user-slide" class="side-nav">
             <li ng-if="!global.is_authed() && !global.at_signup">
-                <a ui-sref="sign-up">Sign Up</a>
+                <a class="make-bigger" ui-sref="sign-up">Sign Up</a>
             </li>
             <li ng-if="!global.is_authed() && !global.at_login">
-                <a ui-sref="login">Login</a>
+                <a class="make-bigger" ui-sref="login">Login</a>
             </li>
             <li ng-if="global.is_authed() && !global.at_profile">
-                <a ui-sref="single-user({ id: global.current_user_id() })">Profile</a>
+                <a class="make-bigger" ui-sref="single-user({ id: global.current_user_id() })">Profile</a>
             </li>
             <li ng-if="global.is_authed()">
-                <a ui-sref="feed( { id: global.current_user_id() } )">Status Feed</a>
+                <a class="make-bigger" ui-sref="feed( { id: global.current_user_id() } )">Status Feed</a>
             </li>
             <li ng-if="global.is_authed() && single_user_ctrl.can_logout()">
-                <a ui-sref="home" ng-click="global.logout()">Logout</a>
+                <a class="make-bigger" ui-sref="home" ng-click="global.logout()">Logout</a>
             </li>
         </ul>
     </div>
@@ -605,25 +647,16 @@
     <h1> Statuses <button ng-show="single_user_ctrl.can_logout() && global.is_authed()" ng-click="single_user_ctrl.bring_up_modal()" id="new-status-btn" type="button"><span id="new-status-text">+</span></button> </h1>
     <hr>
 
-<!--
-    <div class="status-div" ng-repeat="status in single_user_ctrl.user_details.statuses | orderBy: '': reverse = true">
-        <input ng-click="single_user_ctrl.delete_status($index)" ng-show="single_user_ctrl.editing && !single_user_ctrl.edit_modal_up" class="delete-status-btn" type="button" value="X">
-        <input ng-click="single_user_ctrl.bring_up_edit_modal($index, $event)" ng-show="single_user_ctrl.editing && !single_user_ctrl.edit_modal_up" class="edit-status-btn" type="button" value="Edit Status">
-        <br>
-        <i ng-mousedown="single_user_ctrl.heart_button_clicked($event, global.is_authed())" ng-mouseup="single_user_ctrl.heart_button_up($event, status._id, status.content, global.is_authed())" class="fa fa-heart-o fa-2x heart-btn"></i>
-        <span ng-click="single_user_ctrl.show_liked_users_modal(status.likes, status.content)" class="heart-btn-text"> {{ status.likes.length }} </span>
-        <span class="status-content"> {{ status.content }} </span>
-        <br>
-        <br>
-        <i ng-mousedown="single_user_ctrl.comment_icon_down($event)" ng-mouseup="single_user_ctrl.comment_icon_up($event, status.content, status._id, status.comments)" class="fa fa-commenting-o fa-2x comment-icon"></i>
-        <span class="comment-count-text"> {{ status.comments.length }} </span>
-        <hr>
-    </div>-->
-
     <div class="container" ng-repeat="status in single_user_ctrl.user_details.statuses | orderBy: '': reverse = true;">
         <div class="row">
             <div class="col s12 m6">
                 <div class="card">
+
+                    <!-- if image in status show image -->
+                    <div ng-if="status.image" class="card-image">
+                        <img ng-src="{{status.image}}">
+                    </div>
+
                     <div class="card-content">
                         <input ng-click="single_user_ctrl.delete_status($index)" ng-show="single_user_ctrl.editing && !single_user_ctrl.edit_modal_up" class="delete-status-btn" type="button" value="X">
                         <input ng-click="single_user_ctrl.bring_up_edit_modal($index, $event)" ng-show="single_user_ctrl.editing && !single_user_ctrl.edit_modal_up" class="edit-status-btn" type="button" value="Edit Status">
@@ -641,8 +674,6 @@
         </div>
     </div>
 
-
-
 </div>
 
 <div ng-show="single_user_ctrl.modal_up" id="new-status-form">
@@ -652,6 +683,14 @@
     <br>
     <div id="modal-textarea-div">
         <textarea ng-model="single_user_ctrl.new_status.content" id="modal-textarea-text" placeholder="Status content goes here...."></textarea>
+    </div>
+    <br>
+    <div id="upload-img-btn-div">
+        <div style="text-align:center;">
+            <span id="show-filename-text"></span>
+            <i ng-mousedown="single_user_ctrl.change_class_x($event)" ng-mouseup="single_user_ctrl.change_class_x_up($event)" class='fa fa-times-circle-o fa-2x remove-upload-icon'></i>
+        </div>
+        <input id="upload-img-btn" type="button" value="Upload an Image" ng-click="single_user_ctrl.upload_image($event)">
     </div>
     <br>
     <div id="modal-create-btn-div">
